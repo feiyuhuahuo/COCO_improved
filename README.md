@@ -21,7 +21,7 @@ Score: the class score corresponding with MPP
 [A good project which help understand the method of calculating mAP.](https://github.com/rafaelpadilla/Object-Detection-Metrics)
 
 ## Demo  
-- Download ["all_detections.json"](pass) first.
+- Download ["all_detections.json"](https://github.com/feiyuhuahuo/COCO_improved/releases/download/demo_json/all_detections.json) first.
 - Directly run "val_with_json.py" in your IDE.  
 ```
 from pycocotools.coco import COCO
