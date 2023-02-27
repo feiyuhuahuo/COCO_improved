@@ -1,6 +1,6 @@
 import numpy as np
 from collections import defaultdict
-import mask as maskUtils
+import pycocotools._mask as _mask
 from terminaltables import AsciiTable
 import matplotlib.pyplot as plt
 import os
@@ -57,6 +57,7 @@ class SelfEval:
         for dt in dts:
             self.dt[dt['image_id'], dt['category_id']].append(dt)
 
+        print()
         print(f'---------------------Evaluating "{self.iou_type}"---------------------')
 
     def evaluate(self):
@@ -118,7 +119,7 @@ class SelfEval:
                             box_dt = [aa[self.iou_type] for aa in dt_list]
 
                             iscrowd = [int(aa['iscrowd']) for aa in gt_list]
-                            IoUs = maskUtils.iou(box_dt, box_gt, iscrowd)  # shape: (num_dt, num_gt)
+                            IoUs = _mask.iou(box_dt, box_gt, iscrowd)  # shape: (num_dt, num_gt)
 
                             assert len(IoUs) != 0, 'Bug, IoU should not be None when gt and dt are both not empty.'
                             for t, one_thre in enumerate(self.iou_thre):
@@ -199,8 +200,8 @@ class SelfEval:
                 tps = np.logical_and(dt_matched, np.logical_not(dt_ignore))  # shape: (thre_num, dt_num)
                 fps = np.logical_and(np.logical_not(dt_matched), np.logical_not(dt_ignore))
 
-                tp_sum = np.cumsum(tps, axis=1).astype(dtype=np.float)
-                fp_sum = np.cumsum(fps, axis=1).astype(dtype=np.float)
+                tp_sum = np.cumsum(tps, axis=1).astype(dtype='float32')
+                fp_sum = np.cumsum(fps, axis=1).astype(dtype='float32')
 
                 for t, (tp, fp) in enumerate(zip(tp_sum, fp_sum)):
                     tp = np.array(tp)
